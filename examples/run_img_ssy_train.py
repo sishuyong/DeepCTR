@@ -5,10 +5,13 @@ from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 
 from deepctr.models import DeepFM
 from deepctr.inputs import SparseFeat, DenseFeat, get_feature_names
+from tensorflow.python.keras.models import  save_model,load_model
 
 if __name__ == "__main__":
     # data = pd.read_csv('./criteo_sample.txt')
-    data = pd.read_csv('./train_csv_data/train.data_filter_cols.csv')
+    data_p = "/data0/shuyong1/data/img_train_20191023_csv_data/traindata.2019.1017.data_filter_cols.csv"
+    # data_p = "./train_csv_data/train.data_filter_cols.csv"
+    data = pd.read_csv(data_p)
     features = data.columns.tolist()
     features.remove("Unnamed: 0")
     features.remove("label")
@@ -57,3 +60,4 @@ if __name__ == "__main__":
     pred_ans = model.predict(test_model_input, batch_size=256)
     print("test LogLoss", round(log_loss(test[target].values, pred_ans), 4))
     print("test AUC", round(roc_auc_score(test[target].values, pred_ans), 4))
+    save_model(model, 'DeepFM.h5')# save_model, same as before
